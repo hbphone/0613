@@ -1266,13 +1266,20 @@ function onMessageRead(){
     kk.receive('읽었는데 왜 답장이 없어');
   },8000);
 }
-/* 통화 후 인사에 대한 기존 자동 답장 유지 */
+/* 통화 후 인사 자동 답장은 종류별 최초 한 번만 발송 */
 function onPostCallMessage(text,message){
   if(!SC.hadCompletedCall)return;
   if(['sent','read','nag','missed'].includes(SC.stage))return;
   let response=null;
-  if(text.includes('사랑해'))response='내가 더~';
-  else if(text.includes('잘 자')||text.includes('잘자'))response='애기두 잘 자💕';
+  if(text.includes('사랑')){
+    if(SC.loveReplySent)return;
+    SC.loveReplySent=true;
+    response='내가 더~';
+  }else if(text.includes('잘 자')||text.includes('잘자')){
+    if(SC.goodnightReplySent)return;
+    SC.goodnightReplySent=true;
+    response='애기두 잘 자💕';
+  }
   if(!response)return;
   setTimeout(()=>{if(message.pending)kk.markRead()},2000);
   setTimeout(()=>{kk.receive(response)},3000);
