@@ -1274,7 +1274,7 @@ function onPostCallMessage(text,message){
   if(text.includes('사랑해'))response='내가 더~';
   else if(text.includes('잘 자')||text.includes('잘자'))response='애기두 잘 자💕';
   if(!response)return;
-  setTimeout(()=>{if(message.pending)kk.markRead(message)},2000);
+  setTimeout(()=>{if(message.pending)kk.markRead()},2000);
   setTimeout(()=>{kk.receive(response)},3000);
 }
 function onUserReply(){
