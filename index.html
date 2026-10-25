@@ -1204,16 +1204,8 @@ function prepareRingtoneAudio(){
     if(AudioContextType){try{ringtoneAudioContext=new AudioContextType()}catch(e){}}
   }
   if(ringtoneAudioContext&&ringtoneAudioContext.state==='suspended')ringtoneAudioContext.resume().catch(()=>{});
-  // 첫 사용자 조작에서 HTMLAudioElement의 재생 권한도 확보한다.
-  if(!incomingRingtone.datasetUnlocked){
-    incomingRingtone.muted=true;
-    const attempt=incomingRingtone.play();
-    if(attempt&&typeof attempt.then==='function')attempt.then(()=>{
-      incomingRingtone.pause();try{incomingRingtone.currentTime=0}catch(e){}
-      incomingRingtone.muted=false;incomingRingtone.datasetUnlocked='1';
-    }).catch(()=>{incomingRingtone.muted=false});
-    else incomingRingtone.muted=false;
-  }
+  // 벨소리 파일은 절대로 사전 재생하지 않는다.
+  // AudioContext의 잠금만 해제하며 실제 소리는 수신 전화 화면에서만 재생한다.
 }
 document.addEventListener('pointerdown',prepareRingtoneAudio,{capture:true,passive:true});
 document.addEventListener('keydown',prepareRingtoneAudio,{capture:true});
